@@ -41,12 +41,6 @@ class CredibleServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../config/credible.php' => config_path('credible.php'),
         ], 'credible-config');
-
-        // Register commands
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                CompareCredibleServicesCommand::class,
-            ]);
-        }
+        
     }
 }
