@@ -1,5 +1,5 @@
 {
-    "name": "sage/credible",
+    "name": "sage/credible-service",
     "description": "Credible API integration package",
     "type": "library",
     "license": "proprietary",
