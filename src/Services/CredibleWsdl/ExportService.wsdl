@@ -1,15 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ /*
-  ~  * Copyright © ${YEAR} SAGE Counseling, Inc.
-  ~  * All rights reserved.
-  ~  *
-  ~  * This file is part SAGE Counseling, Inc. internal software systems.
-  ~  * Unauthorized use, reproduction, or distribution is strictly prohibited.
-  ~  */
-  ~
-  -->
-
 <wsdl:definitions xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
                   xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
                   xmlns:tns="https://www.crediblebh.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"

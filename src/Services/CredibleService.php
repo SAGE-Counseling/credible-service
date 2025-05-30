@@ -329,6 +329,8 @@ class CredibleService
      */
     public function yieldRows(string $param1 = '', string $param2 = '', string $param3 = '', ?string $start_date = null, ?string $end_date = null): Generator
     {
+        $this->soapClient = $this->soapClient ?: $this->getSoapClient();
+
         $start_date ??= '2020-01-01';
         $end_date ??= date('Y-m-d');
         $params = $this->prepareSoapParams($param1, $param2, $param3, $start_date, $end_date);
