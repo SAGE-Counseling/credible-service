@@ -1,39 +1,39 @@
 {
-    "name": "sage/credible-service",
-    "description": "Credible API integration package",
-    "type": "library",
-    "license": "proprietary",
-    "authors": [
-        {
-            "name": "SAGE Counseling, Inc.",
-            "email": "info@sagecounseling.org"
-        }
-    ],
-    "require": {
-        "php": "^7.4|^8.0",
-        "illuminate/support": "^8.0|^9.0|^10.0",
-        "illuminate/console": "^8.0|^9.0|^10.0",
-        "illuminate/contracts": "^8.0|^9.0|^10.0",
-        "ext-soap": "*",
-        "ext-simplexml": "*",
-        "ext-dom": "*",
-        "ext-json": "*"
-    },
-    "autoload": {
-        "psr-4": {
-            "Sage\\Credible\\": "src/"
-        }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Sage\\Credible\\CredibleServiceProvider"
-            ]
-        }
-    },
-    "config": {
-        "sort-packages": true
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+  "name": "sage/credible-service",
+  "description": "Credible API integration package",
+  "type": "library",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "SAGE Counseling, Inc.",
+      "email": "info@sagecounseling.org"
+    }
+  ],
+  "require": {
+    "php": "^8.2|^8.3",
+    "illuminate/support": "^9.0|^10.0|^11.0|^12.0",
+    "illuminate/console": "^9.0|^10.0|^11.0|^12.0",
+    "illuminate/contracts": "^9.0|^10.0|^11.0|^12.0",
+    "ext-soap": "*",
+    "ext-simplexml": "*",
+    "ext-dom": "*",
+    "ext-json": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Sage\\Credible\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Sage\\Credible\\CredibleServiceProvider"
+      ]
+    }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
 }
