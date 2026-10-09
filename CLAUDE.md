@@ -1,5 +1,7 @@
 # credible-service
 
+Before any task, follow the agent protocol in `.ai/AGENTS.md` (it lists the other `.ai/` files to read).
+
 ## Agent skills
 
 ### Issue tracker
