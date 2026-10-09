@@ -68,7 +68,7 @@ These rules are always in effect unless a task explicitly overrides them.
 
 ## PHP/Laravel package guardrails
 
-- Stay compatible with every `illuminate/*` version `composer.json` allows (currently ^9–^12) and PHP ^8.2.
+- Stay compatible with every `illuminate/*` version `composer.json` allows (currently ^9–^13) and PHP ^8.2.
   Don't use APIs that only exist in a newer framework or PHP version than the lowest allowed.
 - Prefer dependency injection over facades and global aliases (`use Http;`, `use Log;`) in new code. The
   consumers (bi-reflector, credible-importer) need to bind, mock, and fake this service.
@@ -85,7 +85,7 @@ These rules are always in effect unless a task explicitly overrides them.
 - This package has no database of its own. Its only persistent state is Redis keys (`backoff:api:<class>`
   and `...:step`, written by `ApiRetryWithBackoff`) and temporary XML files on the default `Storage` disk.
   Both belong to whatever Laravel app is running the code.
-- There is no test isolation yet (no PHPUnit, no Testbench). Once Testbench is added, its isolation only
+- Tests run under Orchestra Testbench (`Storage::fake()`, mocked `Redis`, `Http::fake()`). That isolation only
   applies inside `vendor/bin/phpunit`. Running the service from a consuming app's `php artisan tinker` hits
   that app's real Redis, real disk, and real Credible connection.
 - Practical consequence: don't "quickly verify" backoff behavior by calling `clearBackoff()`,
@@ -98,8 +98,8 @@ These rules are always in effect unless a task explicitly overrides them.
 
 ## Test stance
 
-- Default test command: `vendor/bin/phpunit` (not configured yet; there is no `tests/` directory). The first
-  task that needs tests should add PHPUnit + Orchestra Testbench as dev dependencies.
+- Default test command: `vendor/bin/phpunit` (also `composer test`). Tests live in `tests/` and extend
+  `Sage\Credible\Tests\TestCase`. `composer.lock` is gitignored (library), so suites resolve fresh.
 - Mock the SOAP client (the constructor accepts one) and use `Http::fake()` for `post()`. Tests must never
   reach the network.
 - Pure logic (XML parsing, row yielding, backoff step math) gets unit tests. Service-provider and config

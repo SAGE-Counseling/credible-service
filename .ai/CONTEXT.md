@@ -8,14 +8,13 @@ Laravel Composer package (`sage/credible-service`, namespace `Sage\Credible\*`) 
 
 ## Framework and versions
 
-- PHP ^8.2; `illuminate/support`, `illuminate/console`, `illuminate/contracts` ^9|^10|^11|^12.
+- PHP ^8.2; `illuminate/support`, `illuminate/console`, `illuminate/contracts` ^9|^10|^11|^12|^13.
 - Needs `ext-soap`, `ext-simplexml`, `ext-dom`, `ext-json`.
 - Auto-discovered provider: `Sage\Credible\CredibleServiceProvider` (merges and publishes `config/credible.php`).
-- Laravel 13 support is open work: issue #1 (blocks SAGE-Counseling/bi-reflector#78).
 
 ## Tooling
 
-- Test command: not configured (no PHPUnit, no `tests/`)
+- Test command: `vendor/bin/phpunit` (PHPUnit + Orchestra Testbench; Testbench major follows Laravel: 7→9 … 11→13)
 - Formatter: not configured
 - Static analysis: not configured
 
