@@ -2,82 +2,49 @@
 
 ## Required startup steps
 
-1. Read:
-    - `.ai/PROJECT_STATE.md`
-    - `.ai/GUARDRAILS.md`
-    - `.ai/CONTEXT.md` (if present)
-    - Open issues: `gh issue list --state open --json number,title,body,labels,assignees`
+Read:
+
+- `.ai/PROJECT_STATE.md`
+- `.ai/GUARDRAILS.md`
+- `.ai/CONTEXT.md` (if present)
+- Open issues: `gh issue list --state open --json number,title,body,labels,assignees`
 
 `PROJECT_STATE.md` holds only the current snapshot (what's working, what's broken, current decisions, next
-milestone). Task history lives in closed issues — query the tracker instead of keeping a local archive file.
+milestone). Task history lives in closed issues.
 
-2. Identify project type and toolchain (confirm from `.ai/CONTEXT.md` — don't guess).
-3. Select exactly one open, unassigned issue, or create a new one.
-4. Claim the issue before coding: `gh issue edit <n> --add-assignee @me`.
+## Issue workflow
 
-## Branching rules
+Claiming an issue, collision checks, branching, moving a task to PR, completion requirements, stalled or
+abandoned tasks, and post-merge cleanup all live in the user-level `implement-issue` skill
+(`~/.claude/skills/implement-issue/`, linked into `~/.agents/skills/` for Codex). It reads this repo's specifics
+from `.ai/*` and `docs/agents/`.
 
-- One branch per task.
-- Branch naming: `ai/claude/<issue-number>-<slug>`.
-- Never work directly on main/master.
+Without that skill (another machine, a cloud session): claim with `gh issue edit <n> --add-assignee @me`, work
+on a branch named `ai/<agent>/<issue-number>-<slug>`, never directly on `main`, meet the test bar in
+`.ai/GUARDRAILS.md`, update `PROJECT_STATE.md`, end the last commit with `Closes #<n>`, post a completion comment
+(summary, files changed, how to test, risks or follow-ups), open the PR, then check out `main`. Merging is the
+user's call, not the agent's.
 
-## Collision avoidance
+## Releases
 
-- Do not modify files already touched by another assigned (claimed) issue.
-- If unavoidable, stop and coordinate by commenting on both issues.
-- Claiming is not atomic. Immediately before assigning yourself, re-check the issue. If a different agent
-  claimed it or touched the same files since you last checked, do not assign yourself; pick a different
-  issue or stop and surface the conflict.
+If the change should reach consuming apps, say in the PR whether it needs a new release tag (latest:
+`git tag --sort=-v:refname | head -1`); tag only when the user asks.
 
-## Allowed scope
+## Unattended runs
 
-- Work only within the claimed issue's scope.
-- No opportunistic fixes or refactors.
+Code changes never go directly on `main` in an unattended run. Docs/config changes may (see
+`GUARDRAILS.md`).
 
-## Moving a task to PR status
+In an unattended run, a message with no tool call ends the work until someone comes back. Don't end a turn
+while work you were asked to do is still owed, in any of these ways:
 
-This is a solo-developer-plus-agents project; PRs here are not a review gate — they exist mainly so the
-human maintainer has a diff to look at before merging. Keep this step lightweight.
+- A summary of what was done that closes by announcing the next step, with no tool call.
+- An offer to carry on "unless you'd prefer otherwise".
+- A list of decisions for the user when, by your own account, none of them blocks the rest of the work.
+- Deciding this is a good place to report because the turn has been long or a milestone is done.
 
-A task only moves from claimed to PR once all of the following are true:
-
-- All new and existing relevant tests pass locally.
-- If the change is non-trivial (new feature, non-obvious logic, anything touching a security/data boundary,
-  or a diff you'd want a second pair of eyes on — use judgment), run `/code-review` and then `/codex:review`,
-  and address or consciously dismiss their findings before opening the PR.
-- If the change should reach consuming apps, say in the PR whether it needs a new release tag (latest is
-  `v1.0.3`); tag only when the user asks.
-- The branch is pushed.
-- Completion requirements below are posted as a comment on the issue.
-- The PR is opened, references the issue (so merging auto-closes it), and its link is posted back to the
-  issue.
-- Return to the main branch so the working tree isn't left sitting on the task branch.
-
-## After a PR merges
-
-If the repo doesn't auto-delete branches on merge:
-
-- Delete the remote branch.
-- Delete the local branch if checked out elsewhere.
-- Merged branches should not be left around — history is preserved on main regardless.
-
-## Stalled or wrong-approach tasks
-
-- If an issue cannot proceed due to an external dependency or missing information, comment with the reason.
-  Leave yourself assigned if you expect to resume; if waiting on someone else, apply whatever this repo's
-  "needs info" label is.
-- If a task is abandoned because the approach was wrong or it's no longer needed, do not leave yourself
-  assigned. Comment "abandoned: <why>", remove yourself as assignee, then stop and ask whether to close the
-  issue or leave it open for someone else. Return to the main branch before stopping.
-
-## Completion requirements
-
-Each completed task must provide, as an issue comment:
-
-- Summary: what changed and why
-- Files changed: list
-- How to test: exact commands
-- Risks or follow-ups
-- Confirmation that `PROJECT_STATE.md` was updated
-
-Then close the issue (or let the merged PR's auto-close do it).
+Put status notes and recommendations on open decisions in the same message as your next tool call, and keep
+going with whatever doesn't depend on the answer. The stops that are wanted: nothing can move without the
+user, the blocker is deliberately protected from you, or the task is finished and its completion
+requirements (`implement-issue` step 7) are posted. This never overrides the need to confirm risky or
+destructive actions — in an unattended run, stop and leave an issue comment instead of taking them.
